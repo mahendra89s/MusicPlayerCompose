@@ -28,8 +28,8 @@ class MyPlayer @Inject constructor(
         player.addListener(this)
         player.setMediaItems(trackList)
         player.prepare()
+        player.playWhenReady = true
     }
-
 
     fun setUpTrack(index: Int, isTrackPlay: Boolean) {
         if (player.playbackState == Player.STATE_IDLE) player.prepare()
@@ -42,7 +42,6 @@ class MyPlayer @Inject constructor(
         if (player.playbackState == Player.STATE_IDLE) player.prepare()
         player.playWhenReady = !player.playWhenReady
     }
-
 
     fun releasePlayer() {
         player.release()

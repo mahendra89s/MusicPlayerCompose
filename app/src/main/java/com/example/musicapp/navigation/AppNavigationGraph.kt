@@ -10,7 +10,7 @@ import com.example.musicapp.presentation.player.PlayerFragment
 
 fun NavGraphBuilder.appNavigationGraph() {
     navigation(
-        startDestination = AppNavigationGraphRoute.PlayerFragment.buildFullPath(),
+        startDestination = AppNavigationGraphRoute.HomeFragment.buildFullPath(),
         route = AppNavigationGraphRoute.AppGraph.buildFullPath()
     ){
         addDestination()

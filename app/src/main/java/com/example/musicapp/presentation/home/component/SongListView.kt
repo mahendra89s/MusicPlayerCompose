@@ -31,6 +31,7 @@ import com.example.musicapp.data.model.Song
 fun SongListView(
     modifier: Modifier,
     songList: List<Song>,
+    isSongSelected : Boolean,
     onSongClick: (Song) -> Unit
 ) {
     LazyColumn(
@@ -49,7 +50,8 @@ fun SongListView(
             )
 
             if(it == songList.size-1){
-                Spacer(modifier = Modifier.height(50.dp))
+                val height = if(isSongSelected) 150.dp else 60.dp
+                Spacer(modifier = Modifier.height(height))
             }
         }
     }
