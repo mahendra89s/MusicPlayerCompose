@@ -2,7 +2,6 @@ package com.example.musicapp.presentation.home.model
 
 import com.example.musicapp.data.model.Song
 import com.example.musicapp.presentation.base.ViewEvent
-import com.example.musicapp.presentation.player.model.PlayerEvent
 
 sealed class HomeEvent : ViewEvent {
     object OnScreenLoad : HomeEvent()

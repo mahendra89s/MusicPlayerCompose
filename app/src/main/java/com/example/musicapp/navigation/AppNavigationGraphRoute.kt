@@ -12,8 +12,4 @@ sealed class AppNavigationGraphRoute(
     object HomeFragment : AppNavigationGraphRoute(
         route = "Home"
     )
-
-    object PlayerFragment : AppNavigationGraphRoute(
-        route = "Player"
-    )
 }

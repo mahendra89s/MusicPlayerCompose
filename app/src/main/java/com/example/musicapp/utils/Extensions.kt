@@ -1,6 +1,5 @@
 package com.example.musicapp.utils
 
-import android.media.session.PlaybackState
 import android.os.Build
 import android.view.HapticFeedbackConstants
 import android.view.View
@@ -10,13 +9,8 @@ import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.keyframes
 import androidx.media3.common.MediaItem
-import androidx.media3.extractor.mp4.Track
 import com.example.musicapp.data.model.Song
-import com.example.musicapp.presentation.player.model.PlayBackState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 fun Long.formatTime(): String {
