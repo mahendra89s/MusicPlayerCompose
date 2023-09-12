@@ -1,11 +1,13 @@
 package com.example.musicapp.presentation.home.component
 
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,11 +30,13 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -40,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.palette.graphics.Palette
 import coil.compose.rememberAsyncImagePainter
 import com.example.musicapp.R
 import com.example.musicapp.data.model.Song
@@ -48,7 +53,9 @@ import com.example.musicapp.presentation.home.model.PlayerState
 import com.example.musicapp.presentation.home.model.PlayerUIState
 import com.example.musicapp.utils.PlayerStates
 import com.example.musicapp.utils.formatTime
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.URL
 
 @Composable
 fun HomePlayerScreen(
@@ -94,7 +101,9 @@ fun HomePlayerView(
 ) {
     val pagerState = rememberPagerState(uiState.playerState.selectedSongIndex)
     val scope = rememberCoroutineScope()
-
+    var dominantColor by remember {
+        mutableStateOf(Color.Black)
+    }
     LaunchedEffect(key1 = uiState.playerState.selectedSongIndex) {
         scope.launch {
             pagerState.animateScrollToPage(uiState.playerState.selectedSongIndex)
@@ -107,35 +116,63 @@ fun HomePlayerView(
         } else if (pagerState.currentPage < uiState.playerState.selectedSongIndex) {
             onPrevSongClick()
         }
+
+        scope.launch(
+            context = Dispatchers.IO
+        ) {
+            val bitmap = BitmapFactory.decodeStream(URL("https://cms.samespace.com/assets/${uiState.selectedPlaylist[pagerState.currentPage].cover}").openStream())
+
+            Palette.Builder(bitmap).generate {
+                it?.let { palette ->
+                    dominantColor = palette.darkVibrantSwatch?.rgb?.let { it1 ->
+                        Color(
+                            it1
+                        )
+                    } ?: Color(0xFF000000)
+                }
+            }
+        }
     }
 
     Scaffold(
         modifier = Modifier
     ) { paddingValues ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .background(
-                    color = Color(0xFF000000)
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            dominantColor,
+                            Color.Black,
+                            Color.Black
+                        )
+                    )
                 )
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center
         ) {
+
             HorizontalPager(
                 pageCount = uiState.selectedPlaylist.size,
-                state = pagerState
+                state = pagerState,
+                contentPadding = PaddingValues(horizontal = 30.dp)
             ) {
+
                 Image(
                     modifier = Modifier
                         .background(
                             color = Color.Transparent,
                             shape = RoundedCornerShape(5.dp)
                         )
-                        .fillMaxWidth(0.8f)
+                        .padding(horizontal = 10.dp)
+                        .fillMaxWidth()
                         .height(300.dp)
                         .size(50.dp),
-                    painter = rememberAsyncImagePainter(model = "https://cms.samespace.com/assets/${uiState.selectedPlaylist[it].cover}"),
+                    painter =
+                    rememberAsyncImagePainter(model = "https://cms.samespace.com/assets/${uiState.selectedPlaylist[it].cover}"),
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds
                 )
@@ -210,7 +247,8 @@ fun TrackProgressSlider(
         thumb = {},
         colors = SliderDefaults.colors(
             thumbColor = Color.Transparent,
-            activeTrackColor = Color(0xFF999898)
+            inactiveTrackColor = Color(0xFF999898),
+            activeTrackColor = Color.White
         )
     )
     Row(
