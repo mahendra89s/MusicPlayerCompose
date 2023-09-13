@@ -178,9 +178,7 @@ fun HomeScreenView(
                                     uiState = uiState.playerUIState,
                                     onSongPlayPauseClick = onSongPlayPauseClick,
                                     onViewClick = {
-                                        scope.launch {
-                                            scope.launch { fullScreenState.show() }
-                                        }
+                                        scope.launch { fullScreenState.show() }
                                     }
                                 )
                             }

@@ -1,6 +1,7 @@
 package com.example.musicapp.presentation.home.component
 
 import android.graphics.BitmapFactory
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,6 +54,7 @@ import com.example.musicapp.presentation.home.model.PlayBackState
 import com.example.musicapp.presentation.home.model.PlayerState
 import com.example.musicapp.presentation.home.model.PlayerUIState
 import com.example.musicapp.utils.PlayerStates
+import com.example.musicapp.utils.animateViewWithHapticFeedback
 import com.example.musicapp.utils.formatTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -66,6 +69,10 @@ fun HomePlayerScreen(
     onNextSongClick: () -> Unit,
     onSeekBarPositionChanged: (Long) -> Unit
 ) {
+    val view = LocalView.current
+    val offsetX = remember { Animatable(0f) }
+    val coroutineScope = rememberCoroutineScope()
+
     DisposableEffect(uiState) {
         onDispose {
             onDispose()
@@ -75,12 +82,15 @@ fun HomePlayerScreen(
     HomePlayerView(
         uiState = uiState,
         onSongPlayPauseClick = {
+            view.animateViewWithHapticFeedback(offsetX, coroutineScope)
             onSongPlayPauseClick()
         },
         onPrevSongClick = {
+            view.animateViewWithHapticFeedback(offsetX, coroutineScope)
             onPrevSongClick()
         },
         onNextSongClick = {
+            view.animateViewWithHapticFeedback(offsetX, coroutineScope)
             onNextSongClick()
         },
         onSeekBarPositionChanged = {
@@ -278,6 +288,7 @@ fun ControlView(
     onNextSongClick: () -> Unit,
     onPrevSongClick: () -> Unit
 ) {
+
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
