@@ -52,7 +52,6 @@ class HomeViewModel @Inject constructor(
 
             is HomeEvent.OnSongClicked -> {
                 if (state.value.uiState is HomeUIState.Success) {
-                    event.song
                     setState {
                         copy(
                             playerUIState = playerUIState.copy(

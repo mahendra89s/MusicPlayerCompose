@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -32,7 +34,7 @@ fun HomePlayerBottomView(
     modifier: Modifier,
     uiState: PlayerUIState,
     onSongPlayPauseClick: () -> Unit,
-    onViewClick : () -> Unit,
+    onViewClick: () -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -41,16 +43,15 @@ fun HomePlayerBottomView(
                 color = Color(0xFF201A18)
             )
             .padding(vertical = 10.dp, horizontal = 10.dp)
-            .clickable { onViewClick() }
-        ,
+            .clickable { onViewClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             modifier = Modifier
                 .background(
-                    color = Color.Red,
-                    shape = RoundedCornerShape(50.dp)
+                    color = Color.Transparent,
                 )
+                .clip(CircleShape)
                 .size(50.dp),
             painter = rememberAsyncImagePainter(model = "https://cms.samespace.com/assets/${uiState.playerState.selectedSong?.cover}"),
             contentDescription = null,
@@ -58,7 +59,9 @@ fun HomePlayerBottomView(
         )
 
         Text(
-            modifier = Modifier.padding(start = 10.dp).weight(1f),
+            modifier = Modifier
+                .padding(start = 10.dp)
+                .weight(1f),
             text = uiState.playerState.selectedSong?.name ?: "",
             color = Color.White,
             fontWeight = FontWeight.Bold,
