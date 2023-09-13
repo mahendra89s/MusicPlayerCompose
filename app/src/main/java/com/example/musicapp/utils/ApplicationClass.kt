@@ -6,13 +6,4 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class ApplicationClass : Application() {
-
-    lateinit var topTrackSongList : MutableList<Song>
-    lateinit var forYouSongList : MutableList<Song>
-
-    override fun onCreate() {
-        super.onCreate()
-        topTrackSongList = mutableListOf()
-        forYouSongList = mutableListOf()
-    }
 }
